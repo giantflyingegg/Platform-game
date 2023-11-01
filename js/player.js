@@ -1,6 +1,6 @@
 
 const ctx = canvas.getContext('2d');
-console.log('playerloaded');
+// console.log('playerloaded');
 
 class CharacterSprite {
     constructor(x, y, initials = '') {
@@ -71,7 +71,7 @@ class CharacterSprite {
 
     }
 
-    update(platforms) {
+    update(platforms, endGameFallOff, endGameTouchRight) {
         // Gravity effect
         this.vy += this.gravity;
     
@@ -104,8 +104,11 @@ class CharacterSprite {
             return; // Stop further updates after end game state
         }
     
+        console.log('Character X:', this.x, 'Character Y:', this.y, 'Canvas Width:');
+
         // Check if the player touches the right hand end of the screen
-        if (this.x + 25 > canvas.width) {
+        if (this.x > canvas.width - 30 && this.y > 550) {
+            console.log('End Game Touch Right Triggered');
             endGameTouchRight();
             return; // Stop further updates after end game state
         }

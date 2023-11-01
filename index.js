@@ -54,7 +54,7 @@ const platforms = [
     new Platform(10, 660, 200, 20),
     new Platform(300, 560, 200, 20),
     new Platform(600, 460, 200, 20),
-    new Platform(900, 360, 200, 20),
+    new Platform(900, 360, 100, 20),
     new Platform(1080, 560, 100, 20),
     new Platform(1180, 660, 100, 20)
 ]
@@ -63,11 +63,11 @@ const platforms = [
 document.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'ArrowLeft':
-            console.log('left');
+            // console.log('left');
             myCharacter.moveLeft();
             break;
         case 'ArrowRight':
-            console.log('right');
+            // console.log('right');
             myCharacter.moveRight();
             break;
         case ' ':
@@ -90,28 +90,18 @@ document.addEventListener('keyup', (e) => {
 let isGameOver = false;
 
 function draw() {
-        console.log('draw');
-        if (isGameOver) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-        for (let platform of platforms) {
-            platform.draw(ctx);
-        }
-        myCharacter.update(platforms);
-        myCharacter.draw(ctx);
-        
-        // Check if player has fallen off the screen
-        if (myCharacter.y > canvas.height) {
-            endGameFallOff();
-        }
-        
-        // Check if player has reached the end of the level
-        if (myCharacter.x > 1280) {
-        endGameTouchRight();
+    // console.log('draw');
+    if (isGameOver) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+    for (let platform of platforms) {
+        platform.draw(ctx);
     }
-
-        requestAnimationFrame(draw);
-    }
+    myCharacter.update(platforms, endGameFallOff, endGameTouchRight); // pass the functions here
+    myCharacter.draw(ctx);
+    
+    requestAnimationFrame(draw);
+}
 
 //Set welcome screen variables  
 function startGame() {
@@ -131,7 +121,7 @@ welcomeScreen.style.display = 'block';
 function endGameFallOff() {
     isGameOver = true;
     console.log('Game Over: You fell off!');
-    endGameMessage.textContent = 'Game Over: You fell off!';
+    endGameMessage.textContent = 'Game Over: The floor is lava and I havent fixed the jump issues yet!';
     endGameModal.style.display = 'block';
 }
 
@@ -141,3 +131,4 @@ function endGameTouchRight() {
     endGameMessage.textContent = 'You Win: You reached the end!';
     endGameModal.style.display = 'block';
 }
+

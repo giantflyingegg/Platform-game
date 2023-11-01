@@ -1,6 +1,6 @@
 const ctx = canvas.getContext('2d');
 
-console.log('Platform class loaded');
+// console.log('Platform class loaded');
 
 export class Platform {
     constructor(x, y, width, height, color = 'white') { 
