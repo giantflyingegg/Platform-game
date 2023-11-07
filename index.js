@@ -5,24 +5,6 @@ import Platform from './js/platforms.js';
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-function restartGame() {
-    console.log('restart game');
-    // Reset player character state
-    myCharacter.x = 40;
-    myCharacter.y = 640;
-    myCharacter.vx = 0;
-    myCharacter.vy = 0;
-    // ... reset any other necessary state ...
-
-    // Hide end game modal
-    endGameModal.style.display = 'none';
-
-    // Restart the game loop
-    isGameOver = false;
-    draw();
-}
-
-
 //start screen variables
 const initialsInput = document.getElementById('initialsInput');
 const welcomeScreen = document.getElementById('welcomeScreen');
@@ -51,11 +33,11 @@ const myCharacter = new CharacterSprite(40, 640);
 
 //Set platform variables and positions
 const platforms = [
-    new Platform(10, 660, 200, 20),
-    new Platform(300, 560, 200, 20),
-    new Platform(600, 460, 200, 20),
-    new Platform(900, 360, 100, 20),
-    new Platform(1080, 560, 100, 20),
+    new Platform(10, 660, 150, 20),
+    new Platform(300, 560, 150, 20),
+    new Platform(600, 460, 150, 20),
+    new Platform(900, 360, 80, 20),
+    new Platform(1080, 560, 80, 20),
     new Platform(1180, 660, 100, 20)
 ]
 
@@ -116,18 +98,35 @@ function startGame() {
     draw()
 }
 
+function restartGame() {
+    console.log('restart game');
+    // Reset player character state
+    myCharacter.x = 40;
+    myCharacter.y = 640;
+    myCharacter.vx = 0;
+    myCharacter.vy = 0;
+    // ... reset any other necessary state ...
+
+    // Hide end game modal
+    endGameModal.style.display = 'none';
+
+    // Restart the game loop
+    isGameOver = false;
+    draw();
+}
+
 welcomeScreen.style.display = 'block';
 
 function endGameFallOff() {
     isGameOver = true;
-    console.log('Game Over: You fell off!');
+    console.log('Lose game end bottom');
     endGameMessage.textContent = 'Game Over: The floor is lava and I havent fixed the jump issues yet!';
     endGameModal.style.display = 'block';
 }
 
 function endGameTouchRight() {
     isGameOver = true;
-    console.log('You Win: You reached the end!');
+    console.log('Win game end right');
     endGameMessage.textContent = 'You Win: You reached the end!';
     endGameModal.style.display = 'block';
 }

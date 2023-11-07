@@ -9,7 +9,7 @@ class CharacterSprite {
         this.vx = 0; // horizontal velocity
         this.vy = 0; // vertical velocity
         this.isJumping = false;
-        this.gravity = 0.5;
+        this.gravity = 0.4;
         this.jumpStrength = -10; // negative because canvas Y is inverted
         this.initials = initials;
     }
@@ -72,44 +72,59 @@ class CharacterSprite {
     }
 
     update(platforms, endGameFallOff, endGameTouchRight) {
-        // Gravity effect
-        this.vy += this.gravity;
-    
-        // Add horizontal movement
-        this.x += this.vx;
+        let onPlatform = false;
     
         // Check collisions with platforms
         for (let platform of platforms) {
+            // Check if character is above the platform and moving down
             if (
                 this.x - 25 < platform.x + platform.width &&
                 this.x + 25 > platform.x &&
                 this.y + 25 > platform.y &&
-                this.y < platform.y + platform.height
+                this.y < platform.y + platform.height &&
+                this.vy >= 0 // Moving downwards
             ) {
-                this.y = platform.y - 25;
-                this.isJumping = false;
-                this.vy = 0;  // stop vertical movement
+                this.y = platform.y - 10; // Place character on top of the platform
+                this.isJumping = false; // Not jumping anymore
+                this.vy = 0; // Stop vertical movement
+                onPlatform = true; // Character is on a platform
+                break; // Exit the loop as we found a platform
             }
         }
     
+        if (!onPlatform) {
+            // Apply gravity if character is not on a platform
+            this.vy += this.gravity;
+            this.isJumping = true; // Character is in the air
+        }
+    
+        // Add horizontal movement
+        this.x += this.vx;
+    
+        // Apply gravity
         this.y += this.vy;
     
         // Ensure character stays within canvas bounds
-        if (this.x < 25) this.x = 25;
-        if (this.x > canvas.width - 25) this.x = canvas.width - 25;
+        if (this.x < 25) {
+            this.x = 25;
+        } else if (this.x > canvas.width - 25) {
+            this.x = canvas.width - 25;
+        }
+    
+        // Check if the character falls off the bottom of the canvas
         if (this.y > canvas.height - 25) {
-            this.y = canvas.height - 25;
-            this.isJumping = false;
-            endGameFallOff();  // Call the end game function for falling off
+            endGameFallOff(); // Call the end game function for falling off
+            this.y = canvas.height - 25; // Optional: Reset the position or prevent further movement
             return; // Stop further updates after end game state
         }
     
-        console.log('Character X:', this.x, 'Character Y:', this.y, 'Canvas Width:');
-
+        // Log the character's position for debugging
+        console.log('Character X:', this.x, 'Character Y:', this.y, 'Canvas Width:', canvas.width);
+    
         // Check if the player touches the right hand end of the screen
         if (this.x > canvas.width - 30 && this.y > 550) {
             console.log('End Game Touch Right Triggered');
-            endGameTouchRight();
+            endGameTouchRight(); // Call the end game function for touching the right edge
             return; // Stop further updates after end game state
         }
     }
